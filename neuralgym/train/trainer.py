@@ -40,6 +40,8 @@ class Trainer(object):
             self._loss = self.context.pop('loss', 0)
         # global step
         self.context['log_progress'] = self.context.pop('log_progress', True)
+        # max_to_keep for saver
+        self.context['max_to_keep'] = int(self.context.pop('max_to_keep', 999999))
         if self.context['log_progress']:
             self._bar = ProgressBar()
         # total loss, beginning timepoint
@@ -88,7 +90,7 @@ class Trainer(object):
         self.context['sess'] = tf.Session(config=self.context['sess_config'])
         self.context['summary_writer'] = tf.summary.FileWriter(
             self.context['log_dir'], self.context['sess'].graph)
-        self.context['saver'] = tf.train.Saver(tf.global_variables())
+        self.context['saver'] = tf.train.Saver(tf.global_variables(), max_to_keep=self.context['max_to_keep'])
         # queue runner
         self.context['start_queue_runners'] = self.context.pop(
             'start_queue_runner', True)
