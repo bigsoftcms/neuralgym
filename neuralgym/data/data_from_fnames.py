@@ -146,14 +146,14 @@ class DataFromFNames(Dataset):
             # self._queue.name, summary_name), math_ops.cast(
                 # self._queue.size(), dtypes.float32) * (1. / capacity))
 
-    def read_img(self, filename):
+    def read_img(self, filename, i):
         img = cv2.imread(filename)
         if img is None:
             print('image is None, sleep this thread for 0.1s.')
             time.sleep(0.1)
             return img, True
         if self.fn_preprocess:
-            img = self.fn_preprocess(img)
+            img = self.fn_preprocess(img, i)
         return img, False
 
     def next_batch(self):
@@ -172,7 +172,7 @@ class DataFromFNames(Dataset):
                 random_h = None
                 random_w = None
                 for i in range(len(filenames)):
-                    img, error = self.read_img(filenames[i])
+                    img, error = self.read_img(filenames[i], i)
                     if self.random_crop:
                         img, random_h, random_w = np_random_crop(
                             img, tuple(self.shapes[i][:-1]),
