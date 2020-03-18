@@ -153,7 +153,7 @@ class DataFromFNames(Dataset):
             time.sleep(0.1)
             return img, True
         if self.fn_preprocess:
-            img = self.fn_preprocess(img, i)
+            img = self.fn_preprocess(img, i, filename)
         return img, False
 
     def next_batch(self):
